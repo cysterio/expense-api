@@ -32,7 +32,10 @@ def dashboard():
 @main.route("/add-expense", methods=["POST"])
 @jwt_required()
 def add_expense_route():
-    user_id = int(get_jwt_identity())
-    data = request.json
+    data = request.get_json()
+    user_id = get_jwt_identity()
+
+    response, status = add_expense(data, user_id)
+    return jsonify(response), status
 
     response, status = add_expense(data, user_id)
