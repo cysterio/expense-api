@@ -1,22 +1,36 @@
 # Python
 __pycache__/
-*.pyc
-*.pyo
-*.pyd
+*.py[cod]
+*$py.class
 
 # Virtual Environment
 .venv/
 venv/
+env/
 
 # Environment variables
 .env
 
-# Database
+# Database files
 *.db
-data/expenses.db
+instance/
+
+# Flask
+*.log
+flask_session/
 
 # VS Code
 .vscode/
 
 # Mac
 .DS_Store
+
+# Docker
+*.tar
+
+# Pytest / coverage
+.coverage
+htmlcov/
+
+# Migrations (if you add Flask-Migrate later)
+migrations/
