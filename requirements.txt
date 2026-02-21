@@ -1,5 +1,5 @@
 Flask
 Flask-SQLAlchemy
 gunicorn
-Flask-JWT-Extended
+flask-jwt-extended
 bcrypt

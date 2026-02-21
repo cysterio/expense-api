@@ -1,28 +1,24 @@
-import os
-
 from flask import Flask, app
 from flask_sqlalchemy import SQLAlchemy
-
 from flask_jwt_extended import JWTManager
 
-jwt = JWTManager()
-
 db = SQLAlchemy()
+jwt = JWTManager()
 
 def create_app():
     app = Flask(__name__)
+    
+    app.secret_key = "supersecretkey"
 
+    # Database config
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///expenses.db"
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
-    import os
-    app.config["JWT_SECRET_KEY"] = os.environ.get("JWT_SECRET_KEY", "dev-secret")
-    jwt.init_app(app)
+    # JWT config
+    app.config["JWT_SECRET_KEY"] = "this-is-a-very-secure-super-long-secret-key-12345"
 
     db.init_app(app)
-
-    from .auth import auth
-    app.register_blueprint(auth)
+    jwt.init_app(app)
 
     from .routes import main
     app.register_blueprint(main)

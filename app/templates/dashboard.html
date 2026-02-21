@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2 class="mb-4">Dashboard Overview</h2>
+
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card shadow p-3 text-center">
+            <h6>Total Spent</h6>
+            <h3 class="text-danger">₹ {{ data.total_spent }}</h3>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card shadow p-3 text-center">
+            <h6>Highest Category</h6>
+            <h4>{{ data.highest_spend_category }}</h4>
+            <small>₹ {{ data.highest_category_amount }}</small>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card shadow p-3 text-center">
+            <h6>Average Spend</h6>
+            <h4>₹ {{ data.average_spend_per_entry }}</h4>
+        </div>
+    </div>
+</div>
+
+<div class="card shadow p-4">
+    <h4 class="mb-3">Add Expense</h4>
+
+    <form method="POST" action="/add-expense-form">
+        <div class="row">
+            <div class="col-md-3">
+                <input type="date" name="date" class="form-control" required>
+            </div>
+
+            <div class="col-md-3">
+                <input type="text" name="category" class="form-control" placeholder="Category" required>
+            </div>
+
+            <div class="col-md-3">
+                <input type="number" name="amount" class="form-control" placeholder="Amount" required>
+            </div>
+
+            <div class="col-md-3">
+                <input type="text" name="payment_mode" class="form-control" placeholder="Payment Mode" required>
+            </div>
+        </div>
+
+        <button class="btn btn-dark mt-3">Add Expense</button>
+    </form>
+</div>
+
+<hr class="my-5">
+
+<h4 class="mb-4">Spending Breakdown</h4>
+
+<div class="row">
+    <div class="col-md-6">
+        <canvas id="categoryChart"></canvas>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const categoryData = {{ data.category_totals | tojson }};
+
+    const labels = Object.keys(categoryData);
+    const values = Object.values(categoryData);
+
+    const ctx = document.getElementById('categoryChart').getContext('2d');
+
+    new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Spending by Category',
+                data: values
+            }]
+        }
+    });
+</script>
+
+{% endblock %}

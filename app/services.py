@@ -40,7 +40,14 @@ def get_dashboard_data(user_id, category=None, start=None, end=None):
     expenses = query.all()
 
     if not expenses:
-        return {"message": "No expenses found for given filters"}, 200
+        return {
+        "total_spent": 0,
+        "budget_remaining": MONTHLY_BUDGET,
+        "highest_spend_category": "None",
+        "highest_category_amount": 0,
+        "average_spend_per_entry": 0,
+        "category_totals": {}
+    }, 200
 
     total_spent = sum(e.amount for e in expenses)
 
@@ -53,18 +60,18 @@ def get_dashboard_data(user_id, category=None, start=None, end=None):
     avg_daily = total_spent / len(expenses)
 
     return {
-        "total_spent": round(total_spent, 2),
-        "budget_remaining": round(MONTHLY_BUDGET - total_spent, 2),
-        "highest_spend_category": highest_category,
-        "highest_category_amount": round(category_totals[highest_category], 2),
-        "average_spend_per_entry": round(avg_daily, 2),
-        "filters_applied": {
-            "category": category,
-            "start": start,
-            "end": end
-        }
-    }, 200
-
+    "total_spent": round(total_spent, 2),
+    "budget_remaining": round(MONTHLY_BUDGET - total_spent, 2),
+    "highest_spend_category": highest_category,
+    "highest_category_amount": round(category_totals[highest_category], 2),
+    "average_spend_per_entry": round(avg_daily, 2),
+    "category_totals": category_totals,  
+    "filters_applied": {
+        "category": category,
+        "start": start,
+        "end": end
+    }
+}, 200
 
 # ---------------------------
 # Add Expense (User Scoped)
