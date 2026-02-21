@@ -72,23 +72,26 @@ This project demonstrates secure authentication, backend analytics processing, d
 ---
 
 ## 📂 Project Structure
+
+```
 expense-api/
 │
 ├── app/
-│ ├── init.py
-│ ├── models.py
-│ ├── routes.py
-│ ├── services.py
-│ ├── templates/
-│ │ ├── base.html
-│ │ ├── login.html
-│ │ ├── register.html
-│ │ └── dashboard.html
+│   ├── __init__.py
+│   ├── models.py
+│   ├── routes.py
+│   ├── services.py
+│   └── templates/
+│       ├── base.html
+│       ├── login.html
+│       ├── register.html
+│       └── dashboard.html
 │
 ├── run.py
 ├── requirements.txt
 ├── Dockerfile
 └── README.md
+```
 
 ---
 
@@ -185,3 +188,4 @@ Through this project, I developed hands-on experience with:
 ## 👨‍💻 Author
 
 Built as a full-stack backend engineering project to move beyond beginner-level Python development.
+
