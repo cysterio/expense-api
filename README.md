@@ -1,27 +1,23 @@
-# 💸 Expense Tracker (Full-Stack Flask Web Application)
+# Expense Tracker
 
-A full-stack expense tracking web application built using Flask, SQLAlchemy, Chart.js, and Docker.
+A full-stack expense tracking web application built with Flask, SQLAlchemy, and Chart.js. The application provides user authentication, expense management, budget tracking, and category-based spending analytics.
 
-This project demonstrates secure authentication, backend analytics processing, data visualization, and containerized deployment.
+## Features
 
----
+- User registration and login
+- Password hashing using Werkzeug
+- Session-based authentication for the web interface
+- JWT-based authentication for API endpoints
+- Add and manage expenses
+- Budget tracking
+- Dashboard with spending summaries
+- Category-wise spending visualization
+- Docker-based deployment
 
-## 🚀 Features
-
-- 🔐 Secure User Authentication (hashed passwords)
-- 🧾 Add & Manage Expenses
-- 📊 Dynamic Dashboard with Category-wise Spending Visualization
-- 💰 Budget Tracking Logic
-- 🗂 Session-based UI Authentication
-- 🔑 JWT-based API Support
-- 🐳 Dockerized Deployment
-- 🌍 Cloud Hosted
-
----
-
-## 🛠 Tech Stack
+## Technology Stack
 
 ### Backend
+
 - Flask
 - Flask-SQLAlchemy
 - Flask-JWT-Extended
@@ -29,53 +25,22 @@ This project demonstrates secure authentication, backend analytics processing, d
 - Gunicorn
 
 ### Frontend
-- Jinja2 Templates
+
+- Jinja2
 - Bootstrap 5
 - Chart.js
 
-### DevOps
+### Development and Deployment
+
+- Python
+- Git
+- GitHub
 - Docker
-- Git & GitHub
 
----
+## Project Structure
 
-## 📊 How It Works
-
-1. Users register and their passwords are securely hashed using Werkzeug.
-2. Login verifies hashed passwords and stores user ID in session.
-3. Expenses are stored in a SQLite database using SQLAlchemy ORM.
-4. Backend aggregates total spending and category-wise totals.
-5. Aggregated data is passed into Jinja templates.
-6. Chart.js dynamically renders a pie chart on the dashboard.
-7. The application is containerized using Docker for consistent deployment.
-
----
-
-## 🧠 Key Engineering Decisions
-
-- **Password Security**  
-  Used `generate_password_hash()` and `check_password_hash()` to avoid storing plain text passwords.
-
-- **Session vs JWT Separation**  
-  Session-based authentication is used for UI rendering.  
-  JWT-based authentication is implemented for API endpoints.
-
-- **Consistent Response Schema**  
-  Ensured backend always returns a consistent dictionary structure to prevent frontend runtime failures.
-
-- **Type Safety**  
-  Converted form date strings into Python `datetime.date` objects before saving to SQLite to ensure ORM compatibility.
-
-- **Containerization**  
-  Dockerized the application to ensure environment consistency across development and deployment.
-
----
-
-## 📂 Project Structure
-
-```
+```text
 expense-api/
-│
 ├── app/
 │   ├── __init__.py
 │   ├── models.py
@@ -86,106 +51,157 @@ expense-api/
 │       ├── login.html
 │       ├── register.html
 │       └── dashboard.html
-│
 ├── run.py
 ├── requirements.txt
 ├── Dockerfile
 └── README.md
 ```
 
----
+## Application Flow
 
-## ⚙️ Setup Instructions (Local Development)
+1. A user registers through the web interface.
+2. The password is hashed before being stored in the database.
+3. During login, the submitted password is verified against the stored hash.
+4. The user's ID is stored in the session after successful authentication.
+5. Protected routes verify the session before allowing access.
+6. Expenses are stored in the database using SQLAlchemy.
+7. The backend calculates spending summaries and category-wise totals.
+8. The aggregated data is passed to the dashboard template.
+9. Chart.js renders the category-wise spending visualization.
 
-### 1️⃣ Clone Repository
+## Authentication
+
+The application uses separate authentication mechanisms for its web interface and API endpoints.
+
+### Session Authentication
+
+Session-based authentication is used for the server-rendered web interface. After a successful login, the user's ID is stored in the session. Protected routes verify the session before processing requests.
+
+### JWT Authentication
+
+JWT-based authentication is implemented for API endpoints. Clients authenticate using a JWT token and include it in the request's `Authorization` header.
+
+```http
+Authorization: Bearer <JWT_TOKEN>
+```
+
+## Database
+
+The application currently uses SQLite for storing users and expenses. SQLAlchemy is used as the ORM for database operations.
+
+## Dashboard Analytics
+
+The dashboard displays the following information:
+
+- Total spending
+- Remaining budget
+- Highest spending category
+- Average spending per expense
+- Category-wise spending breakdown
+
+The backend performs the aggregation, while Chart.js is responsible for rendering the visualization.
+
+## API
+
+### Add Expense
+
+```http
+POST /add-expense
+```
+
+**Authentication:** JWT required
+
+**Request header:**
+
+```http
+Authorization: Bearer <JWT_TOKEN>
+```
+
+The endpoint accepts expense data and stores the expense in the database.
+
+> Add the actual request body and response examples here once the endpoint schema is finalized.
+
+## Local Development
+
+### Clone the Repository
+
+```bash
 git clone <your-repo-url>
 cd expense-api
+```
 
-### 2️⃣ Create Virtual Environment
+### Create a Virtual Environment
+
+**Mac/Linux**
+
+```bash
 python -m venv .venv
-source .venv/bin/activate # Mac/Linux
-.venv\Scripts\activate # Windows
+source .venv/bin/activate
+```
 
-### 3️⃣ Install Dependencies
+**Windows**
+
+```bash
+python -m venv .venv
+.venv\Scripts\activate
+```
+
+### Install Dependencies
+
+```bash
 pip install -r requirements.txt
+```
 
-### 4️⃣ Run Application
-Visit: http://localhost:5000
+### Run the Application
 
----
+```bash
+python run.py
+```
 
-## 🐳 Run Using Docker
+The application will be available at:
 
-Build image:
+```text
+http://localhost:5000
+```
+
+## Docker
+
+### Build the Image
+
+```bash
 docker build -t expense-api .
+```
 
-Run container: 
+### Run the Container
+
+```bash
 docker run -p 8000:5000 expense-api
+```
 
-Visit: http://localhost:8000
----
+The application will be available at:
 
-## 📈 Dashboard Analytics
+```text
+http://localhost:8000
+```
 
-The dashboard calculates:
+## Project Structure
 
-- Total Spending
-- Remaining Budget
-- Highest Spending Category
-- Average Spending Per Entry
-- Category-wise Spending Breakdown (Pie Chart)
+The application follows a modular Flask structure:
 
-Data aggregation is performed in the backend and visualized using Chart.js.
+- `__init__.py` — Application initialization and configuration
+- `models.py` — Database models
+- `routes.py` — Application and API routes
+- `services.py` — Business logic and data processing
+- `templates/` — Jinja2 templates
+- `run.py` — Application entry point
 
----
+## Future Improvements
 
-## 🔐 Authentication Flow
-
-1. User registers → password hashed before saving.
-2. User logs in → hash verified.
-3. Session stores user ID.
-4. Protected routes validate session.
-5. JWT tokens available for API routes.
-
----
-
-## 🧪 Example API Endpoint (JWT Protected)
-
-Add expense via API:
-POST /add-expense
-
-Requires: 
-Authorization: Bearer <JWT_TOKEN>
-
----
-
-## 📌 Future Improvements
-
-- Monthly trend line chart
-- Category filter dropdown
-- Expense history table with pagination
-- Flash success/error notifications
-- PostgreSQL production database
-- Flask-Migrate for schema migrations
+- Monthly spending trend visualization
+- Category filtering
+- Paginated expense history
+- Flash notifications
+- PostgreSQL support
+- Flask-Migrate integration
 - Automated testing
-
----
-
-## 🎯 Learning Outcomes
-
-Through this project, I developed hands-on experience with:
-
-- Full-stack application architecture
-- Authentication systems
-- ORM-based database management
-- Data aggregation and visualization
-- Template rendering with Jinja2
-- Debugging production-style backend errors
-- Docker-based deployment workflows
-
----
-
-## 👨‍💻 Author
-
-Built as a full-stack backend engineering project to move beyond beginner-level Python development.
 
